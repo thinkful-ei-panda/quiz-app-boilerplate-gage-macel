@@ -25,7 +25,20 @@ const store = {
         '2005'
       ],
       correctAnswer: '2020'
-    }
+    },
+    {
+      question: 'When did Shakespeare write Romeo and Juliet',
+      answers: [
+        '1580',
+        '1784',
+        '1595',
+        '1802'
+      ],
+      correctAnswer : '1595'
+    },
+    {
+
+    },
   ],
   quizStarted: false,
   questionNumber: 0,
@@ -46,15 +59,77 @@ const store = {
  * SEE BELOW FOR THE CATEGORIES OF THE TYPES OF FUNCTIONS YOU WILL BE CREATING 👇
  * 
  */
-
 /********** TEMPLATE GENERATION FUNCTIONS **********/
+
+const startPointGenerator = () => {
+
+
+};
+
+const questionPageGenerator = (storeage) => {
+
+
+};
+
+const responsePageGenerator = (storeage) => {
+
+
+};
+
+const finalPageGenerator = (storeage) => {
+
+
+};
 
 // These functions return HTML templates
 
 /********** RENDER FUNCTION(S) **********/
 
+const renderStart = ( ) => {
+
+};
+
+const generalRenderFunction = ( ) => {
+
+
+};
+
+const renderResponse = ( ) => {
+
+
+};
+ 
+const renderFinal = ( ) => {
+
+
+};
+
 // This function conditionally replaces the contents of the <main> tag based on the state of the store
 
 /********** EVENT HANDLER FUNCTIONS **********/
+const startQuizFunction= () =>{
+
+
+};
+
+const questionAnswer = () => {
+
+};
+
+const correct = ( ) => {
+
+
+};
+
+const incorrect =()=> {
+
+};
+
+const restart = () => {
+
+
+};
+
+
 
 // These functions handle events (submit, click, etc)
