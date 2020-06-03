@@ -39,8 +39,15 @@
         <label for="question-4">question 4</label>
       </form>
 </div>
-<div>
-  
+<div class="box response ">
+  <!-- display: "correct/wrong", -->
+  <h2>`${correct}$/{incorrect}`</h2>
+<p><span>`Question: ${q1/q2}</span></p>
+</div>
+<div class=" box finale">
+<h2>Your Score</h2>
+<p>`${numRight}/${numWrong}`</p>
+<button class="restart-game" type="button">Try Again?</button>
 </div>
   </main>
   <script src="https://code.jquery.com/jquery-3.4.1.slim.js" crossorigin="anonymous"></script>
