@@ -1,6 +1,8 @@
 /**
  * Example store structure
  */
+'use strict';
+
 const store = {
   // 5 or more questions are required
   questions: [
@@ -19,10 +21,10 @@ const store = {
       answers: [
         '1970',
         '2015',
-        '2019',
+        '2020',
         '2005'
       ],
-      correctAnswer: '2019'
+      correctAnswer: '2020'
     }
   ],
   quizStarted: false,
