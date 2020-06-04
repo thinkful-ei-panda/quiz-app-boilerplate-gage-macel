@@ -172,15 +172,18 @@ function renderFinal( ) {
 //function to start game 
 function startQuizFunction() {
   $('main').on('click','input.start-game', x => {
-    alert('yuata!!');
+    log('yuata!!');
+    store.quizStarted = true; 
+    renderQuestion();
+
   });
   
 }
 
 function questionAnswer() {
-  $('main').on('submit', 'input[type=button]', x => {
-    x.preventDefault();
-    log('this works')
+  $('main').submit(function() {
+    var radioValue = $('input[name=question]:checked').val();
+    log(radioValue);
   })
 
 }
@@ -214,7 +217,8 @@ function incorrect() {
 //when next button is pressed
 //load question page
 function nextQuestion(){
-
+//click button for next question
+  renderQuestion();
 }
 
 function restart() {
@@ -230,7 +234,7 @@ function restart() {
 function handleFunctionCalls(){
   renderStart();
   startQuizFunction();
-  renderQuestion();
+  
 }
 
 $(handleFunctionCalls);
