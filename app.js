@@ -193,15 +193,10 @@ const changeButton = () =>{
 const highLightRight = () => {
   let j;
   for(let i= 0 ; i < questionShort.answers.length ; i++){
-    //log('highlight is working');
-    //log( questionShort.answers[i]);
-    //log( questionShort.correctAnswer);
-    log($(`div.${questionShort.answers[i]}`));
     if(questionShort.correctAnswer === questionShort.answers[i]){
       j = i ;
     } 
   }
-  log($(`div.${questionShort.answers[j]}`));
   $(`div.${questionShort.answers[j]}`).css('background-color' , 'yellow');
     
 };
@@ -218,8 +213,9 @@ function questionAnswer() {
 }
 
 
+
 function questionCounter(){
-  return store.questionNumber++;
+  store.questionNumber++;
 }
 
 //++ to store.questionNumber
