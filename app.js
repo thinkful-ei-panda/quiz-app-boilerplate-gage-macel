@@ -3,6 +3,9 @@
  */
 'use strict';
 
+log = console.log;
+
+
 const store = {
   // 5 or more questions are required
   questions: [
@@ -61,74 +64,106 @@ const store = {
  */
 /********** TEMPLATE GENERATION FUNCTIONS **********/
 
-const startPointGenerator = () => {
+
+const statePageTemplate = `<div class="box start">
+                            <h2>start quiz</h2>
+                            <p>bla bla bla basic intro of what the user will be getting into</p>
+                            <button class="start-game" type="button">start quiz</button>
+                          </div>`;
 
 
-};
+function questionPageGenerator(storeage) {
+  return `<div class="box questions">
+            <h2>${store.question.question}</h2>
+              <span class="Q0">${fun.question[0]}</span>
+                <button type="Q0">A</button><br>
+              <span class="Q0">${fun.question[1]}</span>
+                <button type="Q0">B</button><br>
+              <span class="Q0">${fun.question[2]}</span>
+                <button type="Q0">C</button><br>
+              <span class="Q0">${fun.question[3]}</span>
+                <button type="Q0">D</button>
+</div>`;
 
-const questionPageGenerator = (storeage) => {
+}
 
+function responsePageGenerator(storeage) {
+  return <div class="box reply">
+       <h2>`${reply}$</h2>
+    <p><span>`Question: ${q1} out of ${q.length}</span></p>
+    </div>
 
-};
+}
 
-const responsePageGenerator = (storeage) => {
+function finalPageGenerator(storeage) {
+  return `<div class=" box finale">
+            <h2>Your Score</h2>
+              <span class="out-of">${numRight} out of ${numWrong} correct</span><br>
+              <span>${'score message reply'}</span><br>
+                <button class="restart-game" type="button">Try Again?</button>
+        </div>`;
 
+}
 
-};
+function outOfReply(){
+    
 
-const finalPageGenerator = (storeage) => {
-
-
-};
+}
 
 // These functions return HTML templates
 
 /********** RENDER FUNCTION(S) **********/
 
-const renderStart = ( ) => {
+function renderStart( ) {
+  $('.js-box-placement').html(statePageTemplate);
+}
 
-};
-
-const generalRenderFunction = ( ) => {
-
-
-};
-
-const renderResponse = ( ) => {
+function generalRenderFunction( ) {
 
 
-};
+}
+
+function renderResponse( ) {
+
+
+}
  
-const renderFinal = ( ) => {
+function renderFinal( ) {
 
 
-};
+}
 
 // This function conditionally replaces the contents of the <main> tag based on the state of the store
 
 /********** EVENT HANDLER FUNCTIONS **********/
-const startQuizFunction= () =>{
+function questionCounter(){
+  return store.questionNumber++;
+}
 
+function startQuizFunction() {
 
-};
+  questionCounter();
+}
 
-const questionAnswer = () => {
+function questionAnswer() {
 
-};
+}
+//++ to store.questionNumber
+function correct( ) {
 
-const correct = ( ) => {
+  questionCounter();
+}
+//++ to store.questionNumber
+function incorrect() {
 
+  questionCounter();
+}
 
-};
+function restart() {
 
-const incorrect =()=> {
+  store.questionNumber = 0;
+}
 
-};
-
-const restart = () => {
-
-
-};
 
 
 
