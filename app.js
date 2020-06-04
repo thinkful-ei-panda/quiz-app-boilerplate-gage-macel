@@ -13,10 +13,10 @@ const store = {
     {
       question: 'What color is broccoli?',
       answers: [
-        'red',
+        'green',
         'orange',
         'pink',
-        'green'
+        'red'
       ],
       correctAnswer: 'green'
     },
@@ -65,8 +65,6 @@ const store = {
 /********** TEMPLATE GENERATION FUNCTIONS **********/
 
 
-const questionIndex = store.questionNumber;
-
 
 function startPageGenerator(){
   return `<div class="box start">
@@ -76,40 +74,42 @@ function startPageGenerator(){
           </div>`;
 }
 
+const questionIndex = store.questionNumber;
+
 const questionShort = store.questions[questionIndex];
 
 const questionTotal = store.questions.length ;
-
+/********Question ********/
 function questionPageGenerator() {
   return `<div class='box questions'>
             <h2>${questionShort.question}</h2>
             <span>${questionIndex} out of ${questionTotal}</span>
               <form id="questions-form" action="">
-                <div>
-                  <input type="radio" id="question-1" name="question" value="">
+                <div class ="${questionShort.answers[0]}">
+                  <input type="radio" id="${questionShort.answers[0]}" name="question" value="${questionShort.answers[0]}">
                   <label for="question-1">${questionShort.answers[0]}</label>
                 </div>
-                <div>
-                  <input type="radio" id="question-2" name="question" value="female">
+                <div class ="${questionShort.answers[1]}">
+                  <input type="radio" id="${questionShort.answers[1]}" name="question" value="${questionShort.answers[1]}">
                   <label for="question-2">${questionShort.answers[1]}</label>
                 </div>
-                <div>
-                  <input type="radio" id="question-3" name="question" value="other">
+                <div class ="${questionShort.answers[2]}">
+                  <input type="radio" id="${questionShort.answers[2]}" name="question" value="${questionShort.answers[2]}">
                   <label for="question-3">${questionShort.answers[2]}</label>
                 </div>
-                <div>
-                  <input type="radio" id="question-4" name="question" value="other">
+                <div class ="${questionShort.answers[3]}">
+                  <input type="radio" id="${questionShort.answers[3]}" name="question" value="${questionShort.answers[3]}">
                   <label for="question-4">${questionShort.answers[3]}</label>
                 </div>
                 <div>
-                <input type="button" value="submit">
+                <input class="submitA" type="button" value="submit">
                 </div>
               </form>
            </div>`;
            
 
 }
-
+/*************response*************/
 function responsePageGenerator(reply) {
   return `<div class="box reply">
        <h2>${reply}</h2>
@@ -118,7 +118,7 @@ function responsePageGenerator(reply) {
     </div>`;
 
 }
-
+/**********Finale part ***********/
 function outOfReply(){
   return store.score / questionTotal < .5 ? 'Oof'
     : store.score / questionTotal < .65 ? 'not too bad'
@@ -171,26 +171,52 @@ function renderFinal( ) {
 
 //function to start game 
 function startQuizFunction() {
-  $('main').on('click','input.start-game', x => {
-    log('yuata!!');
+  $('main').on('click','input.start-game', () => {
+    log('yay!');
     store.quizStarted = true; 
     renderQuestion();
-
+    questionAnswer();
   });
   
 }
 
+function ifCorrect(reply){
+  reply === questionShort.correctAnswer ? correct() : incorrect();
+  questionCounter();
+}
+
+const changeButton = () =>{
+  $('input.submitA').attr('value', 'next-question');
+  $('input.submitA').attr('class','next');
+};
+
+const highLightRight = () => {
+  let j;
+  for(let i= 0 ; i < questionShort.answers.length ; i++){
+    //log('highlight is working');
+    //log( questionShort.answers[i]);
+    //log( questionShort.correctAnswer);
+    log($(`div.${questionShort.answers[i]}`));
+    if(questionShort.correctAnswer === questionShort.answers[i]){
+      j = i ;
+    } 
+  }
+  log($(`div.${questionShort.answers[j]}`));
+  $(`div.${questionShort.answers[j]}`).css('background-color' , 'yellow');
+    
+};
+
 function questionAnswer() {
-  $('main').submit(function() {
-    var radioValue = $('input[name=question]:checked').val();
+  $('main').on('click','input.submitA',function(x) {
+    x.preventDefault;
+    var radioValue = $('input[name="question"]:checked').val();
     log(radioValue);
-  })
+    changeButton();
+    highLightRight();
+  });
 
 }
 
-function ifCorrect(){
-  $('button[type=Q0]').val() === questionShort.correctAnswer ? correct() : incorrect();
-}
 
 function questionCounter(){
   return store.questionNumber++;
@@ -202,7 +228,7 @@ function correct( ) {
   renderResponse('correct !');
 
   store.score++;
-  questionCounter();
+  
 }
 
 //++ to store.questionNumber
@@ -210,14 +236,17 @@ function correct( ) {
 function incorrect() {
   renderResponse('incorrect');
 
-  questionCounter();
+  
 }
 
 //this will handel the next question button
 //when next button is pressed
 //load question page
 function nextQuestion(){
-//click button for next question
+  $('main').on('click','input', () =>{
+
+  });
+  //click button for next question
   renderQuestion();
 }
 
