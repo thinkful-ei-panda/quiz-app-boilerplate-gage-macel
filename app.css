@@ -11,10 +11,19 @@ main{
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-direction: column;
 }
 
 .box{
+<<<<<<< HEAD
   border: solid black;
   font-size: 20px;
 }
 
+=======
+  text-align: center;
+  border:solid black;
+  font-size: 20px;
+  padding: 20px;
+}
+>>>>>>> 80afef567c0ae5d07752f5e5e526216a790607a7
