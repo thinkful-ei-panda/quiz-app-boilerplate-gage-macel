@@ -1,3 +1,7 @@
+/* eslint-disable no-undef */
+/**
+ * Example store structure
+ */
 'use strict';
 
 const log = console.log;
@@ -35,10 +39,7 @@ const store = {
         '1802'
       ],
       correctAnswer : '1595'
-    },
-    {
-
-    },
+    }
   ],
   quizStarted: false,
   // questions.length
@@ -46,74 +47,6 @@ const store = {
   // increment score when correct answer
   score: 0
 };
-
-// const getQuestion = () => store.questions[i].answers;
-
-// const startPointGenerator = () => {
-
-// };
-function handleStartButton ()  {
-  $('.start-form').submit( function (event){
-    event.preventDefault();
-    console.log('this is working properly')
-  })
-}
-
-const startPage = 
-`<div class="box start">
-<h2>Start Quiz!</h2>
-<p>Let's begin! Press button below</p>
-<form class="start-form">
-<button class="start-game" type="submit">start quiz</button>
-</form>
-</div>
-`
-
-// const questionsPage = `<div class='box test'>
-// <h2>question</h2>
-// <span> 'x' out of 'y'</span>
-// <form action="answering question">
-//   <input type="radio" id="question-1" name="question" value="">
-//   <label for="question-1">${question1}</label><br>
-//   <input type="radio" id="question-2" name="question" value="female">
-//   <label for="question-2">${question2}</label><br>
-//   <input type="radio" id="question-3" name="question" value="other">
-//   <label for="question-3">${question3}</label>
-//   <input type="radio" id="question-4" name="question" value="other">
-//   <label for="question-4">${question4}</label>
-// </form>
-// </div>`
-
-// const responsePage = `<div class="box start"
-// <!-- displays: "correct/wrong", -->
-// <h2>${correct}$/{incorrect}</h2>
-// <p><span>Question: ${q1/q2}</span></p>
-// </div>`
-
-// const finalePage =`<div class=" box finale">
-// <h2>Your Score</h2>
-// <p>${numRight}/${numWrong}</p>
-// <button class="restart-game" type="button">Try Again?</button>
-// </div>`
-
-const renderPage = () => {
-// render start page
-   $('main').html(startPage)
-// render questions
-  //  $('main').html(questionsPage)
-// render response
-  //  $('main').html(responsePage)
-// render finale
-  //  $('main').html(finalePage)
-}
-
-const handleQuiz = () => {
-  handleStartButton()
-  renderPage()
-}
-
-$(handleQuiz)
-
 
 /**
  * 
@@ -139,49 +72,73 @@ function startPageGenerator(){
   return `<div class="box start">
             <h2>start quiz</h2>
             <p>bla bla bla basic intro of what the user will be getting into</p>
-              <button class="start-game" type="button">start quiz</button>
+              <input class="start-game" type="button" value='start quiz'>
           </div>`;
 }
 
 const questionShort = store.questions[questionIndex];
 
+const questionTotal = store.questions.length ;
+
 function questionPageGenerator() {
-  return `<div class="box questions">
-            <h2>${questionShort.question}</h2>        
-              <span class="Q0">${questionShort.answers[0]}</span>        
-                <button type="Q0">A</button><br>
-              <span class="Q0">${questionShort.answers[1]}</span>        
-                <button type="Q0">B</button><br>
-              <span class="Q0">${questionShort.answers[2]}</span>        
-                <button type="Q0">C</button><br>
-              <span class="Q0">${questionShort.answers[3]}</span>        
-                <button type="Q0">D</button>
-</div>`;
+  return `<div class='box questions'>
+            <h2>${questionShort.question}</h2>
+            <span>${questionIndex} out of ${questionTotal}</span>
+              <form id="questions-form" action="">
+                <div>
+                  <input type="radio" id="question-1" name="question" value="">
+                  <label for="question-1">${questionShort.answers[0]}</label>
+                </div>
+                <div>
+                  <input type="radio" id="question-2" name="question" value="female">
+                  <label for="question-2">${questionShort.answers[1]}</label>
+                </div>
+                <div>
+                  <input type="radio" id="question-3" name="question" value="other">
+                  <label for="question-3">${questionShort.answers[2]}</label>
+                </div>
+                <div>
+                  <input type="radio" id="question-4" name="question" value="other">
+                  <label for="question-4">${questionShort.answers[3]}</label>
+                </div>
+                <div>
+                <input type="button" value="submit">
+                </div>
+              </form>
+           </div>`;
+           
 
 }
 
-function responsePageGenerator(storeage) {
+function responsePageGenerator(reply) {
   return `<div class="box reply">
-       <h2>${reply}$</h2>
-    <p><span> Question: ${q1} out of ${q.length}</span></p>
+       <h2>${reply}</h2>
+    <p><span> Question: ${questionIndex} out of ${questionTotal}</span></p>
+    <input type="button" value='Next Question'>Next Question
     </div>`;
 
 }
 
-function finalPageGenerator(storeage) {
+function outOfReply(){
+  return store.score / questionTotal < .5 ? 'Oof'
+    : store.score / questionTotal < .65 ? 'not too bad'
+      : store.score / questionTotal < .8 ? 'Good job'
+        : store.score / questionTotal < .9 ? 'Great Job!'
+          : 'Outstanding ' ;
+
+}
+
+function finalPageGenerator() {
   return `<div class=" box finale">
             <h2>Your Score</h2>
-              <span class="out-of">${'numRight'} out of ${'numWrong'} correct</span><br>
-              <span>${'score message reply'}</span><br>
-                <button class="restart-game" type="button">Try Again?</button>
+              <span class="out-of">${store.score} out of ${questionTotal} correct</span><br>
+              <span>${outOfReply()}</span><br>
+                <input type="button" class="restart-game" value='Try Again?'>
         </div>`;
 
 }
 
-function outOfReply(){
 
-
-}
 
 // These functions return HTML templates
 
@@ -189,38 +146,47 @@ function outOfReply(){
 
 function renderStart( ) {
   log('renderStart is working');
-  $('.js-box-placement').html(startPageGenerator());
+  $('main').html(startPageGenerator());
+  store.quizStarted = false;
 }
 
-function generalRenderFunction( ) {
-log('generalRenderFunction is working');
-  $('.js-box-placement').html(questionPageGenerator());
+function renderQuestion( ) {
+  log('generalRenderFunction is working');
+  $('main').html(questionPageGenerator());
 }
 
-function renderResponse( ) {
-log('renderResponse is working ');
-  $('.js-box-placement').html(responsePageGenerator());
+function renderResponse(reply) {
+  log('renderResponse is working ');
+  $('main').html(responsePageGenerator(reply));
 }
  
 function renderFinal( ) {
   log('renderFinal is working ');
-  $('.js-box-placement').html(finalPageGenerator());
+  $('main').html(finalPageGenerator());
 }
 
 // This function conditionally replaces the contents of the <main> tag based on the state of the store
 
 /********** EVENT HANDLER FUNCTIONS **********/
+
+//function to start game 
 function startQuizFunction() {
- $('button.start-game');
+  $('main').on('click','input.start-game', x => {
+    alert('yuata!!');
+  });
   
 }
 
 function questionAnswer() {
+  $('main').on('submit', 'input[type=button]', x => {
+    x.preventDefault();
+    log('this works')
+  })
 
 }
 
 function ifCorrect(){
-  return $('button[type=Q0]').val() === questionShort.correctAnswer;
+  $('button[type=Q0]').val() === questionShort.correctAnswer ? correct() : incorrect();
 }
 
 function questionCounter(){
@@ -228,26 +194,43 @@ function questionCounter(){
 }
 
 //++ to store.questionNumber
+//render response page w/correct
 function correct( ) {
+  renderResponse('correct !');
+
+  store.score++;
+  questionCounter();
+}
+
+//++ to store.questionNumber
+//render response page w/incorrect
+function incorrect() {
+  renderResponse('incorrect');
 
   questionCounter();
 }
-//++ to store.questionNumber
-function incorrect() {
 
-  questionCounter();
+//this will handel the next question button
+//when next button is pressed
+//load question page
+function nextQuestion(){
+
 }
 
 function restart() {
-
+  //if restate button is press, todo
+  // [load start & reset score to 0]done
+  // [let store.quizStarted = false]done
   store.questionNumber = 0;
+  renderStart();
 }
 
 /******handleFunctionCall******/
 
 function handleFunctionCalls(){
   renderStart();
-  generalRenderFunction();
+  startQuizFunction();
+  renderQuestion();
 }
 
 $(handleFunctionCalls);

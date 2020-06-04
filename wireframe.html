@@ -24,19 +24,26 @@
     
     </div>
 <!--  questions page -->
-    <div class='box test'>
-
-      <h2>question</h2>
-      <span> 'x' out of 'y'</span>
-      <form action="answering question">
-        <input type="radio" id="question-1" name="question" value="">
-        <label for="question-1">'question 1'</label><br>
-        <input type="radio" id="question-2" name="question" value="female">
-        <label for="question-2">question 2 </label><br>
-        <input type="radio" id="question-3" name="question" value="other">
-        <label for="question-3">question 3</label>
-        <input type="radio" id="question-4" name="question" value="other">
-        <label for="question-4">question 4</label>
+    <div class='box questions'>
+      <h2>${questionShort.question}</h2>
+      <span>${questionIndex} out of ${questionTotal}</span>
+      <form id="questions-form" action="">
+        <div>
+          <input type="radio" id="question-1" name="question" value="">
+          <label for="question-1">${questionShort.answers[0]}</label>
+        </div>
+        <div>
+          <input type="radio" id="question-2" name="question" value="female">
+          <label for="question-2">${questionShort.answers[1]}</label>
+        </div>
+        <div>
+          <input type="radio" id="question-3" name="question" value="other">
+          <label for="question-3">${questionShort.answers[2]}</label>
+        </div>
+        <div>
+          <input type="radio" id="question-4" name="question" value="other">
+          <label for="question-4">${questionShort.answers[3]}</label>
+        </div>
       </form>
 </div>
 <div class="box response ">
