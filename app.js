@@ -43,8 +43,6 @@ function handleStartButton ()  {
   })
 }
 
-
-
 const startPage = 
 `<div class="box start">
 <h2>Start Quiz!</h2>
