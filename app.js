@@ -74,13 +74,19 @@ function startPageGenerator(){
           </div>`;
 }
 
-const questionIndex = store.questionNumber;
+let questionIndex 
 
-const questionShort = store.questions[questionIndex];
+let questionShort 
 
-const questionTotal = store.questions.length ;
+let questionTotal 
 /********Question ********/
 function questionPageGenerator() {
+   questionIndex = store.questionNumber;
+
+ questionShort = store.questions[questionIndex];
+
+ questionTotal = store.questions.length ;
+
   return `<div class='box questions'>
             <h2>${questionShort.question}</h2>
             <span>${questionIndex} out of ${questionTotal}</span>
@@ -110,11 +116,12 @@ function questionPageGenerator() {
 
 }
 /*************response*************/
+// set timeout, before html replaced
 function responsePageGenerator(reply) {
   return `<div class="box reply">
        <h2>${reply}</h2>
     <p><span> Question: ${questionIndex} out of ${questionTotal}</span></p>
-    <input type="button" value='Next Question'>Next Question
+    <input class="reply" type="button" value='Next Question'>
     </div>`;
 
 }
@@ -153,6 +160,7 @@ function renderStart( ) {
 function renderQuestion( ) {
   log('generalRenderFunction is working');
   $('main').html(questionPageGenerator());
+  log(questionIndex)
 }
 
 function renderResponse(reply) {
@@ -181,8 +189,9 @@ function startQuizFunction() {
 }
 
 function ifCorrect(reply){
-  reply === questionShort.correctAnswer ? correct() : incorrect();
   questionCounter();
+  reply === questionShort.correctAnswer ? correct() : incorrect();
+  
 }
 
 const changeButton = () =>{
@@ -193,10 +202,10 @@ const changeButton = () =>{
 const highLightRight = () => {
   let j;
   for(let i= 0 ; i < questionShort.answers.length ; i++){
-    //log('highlight is working');
-    //log( questionShort.answers[i]);
-    //log( questionShort.correctAnswer);
-    log($(`div.${questionShort.answers[i]}`));
+    log('highlight is working');
+    log( questionShort.answers[i]);
+    log( questionShort.correctAnswer);
+
     if(questionShort.correctAnswer === questionShort.answers[i]){
       j = i ;
     } 
@@ -206,13 +215,24 @@ const highLightRight = () => {
     
 };
 
+let check = true;
 function questionAnswer() {
-  $('main').on('click','input.submitA',function(x) {
+  $('main').on('click','.submitA',function(x) {
     x.preventDefault;
-    var radioValue = $('input[name="question"]:checked').val();
+    let radioValue = $('input[name="question"]:checked').val();
     log(radioValue);
     changeButton();
     highLightRight();
+    
+    
+    log(store.questionNumber)
+    setTimeout(function(){ifCorrect(radioValue) }, 3000);
+      // ifCorrect(radioValue);
+    //   startQuestion()
+    log(store.questionNumber)
+
+
+    
   });
 
 }
@@ -224,18 +244,21 @@ function questionCounter(){
 
 //++ to store.questionNumber
 //render response page w/correct
-function correct( ) {
+function correct() {
   renderResponse('correct !');
-
+  log(store.questionNumber)
+  nextQuestion();
   store.score++;
   
+  // questionAnswer()
 }
 
 //++ to store.questionNumber
 //render response page w/incorrect
+
 function incorrect() {
   renderResponse('incorrect');
-
+  nextQuestion();
   
 }
 
@@ -243,11 +266,13 @@ function incorrect() {
 //when next button is pressed
 //load question page
 function nextQuestion(){
-  $('main').on('click','input', () =>{
-
+  $('main').on('click','input.reply', () =>{
+    log('this is working')
+    renderQuestion();
+    questionAnswer();
   });
   //click button for next question
-  renderQuestion();
+  
 }
 
 function restart() {
@@ -266,6 +291,9 @@ function handleFunctionCalls(){
   
 }
 
-$(handleFunctionCalls);
+handleFunctionCalls();
 
 // These functions handle events (submit, click, etc)
+
+
+// commit, push 
