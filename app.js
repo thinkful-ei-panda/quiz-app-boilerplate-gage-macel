@@ -11,34 +11,83 @@ const store = {
   
   questions: [
     {
-      question: 'What color is broccoli?',
+      question: `What was the name of the trade route that was responsible for the 
+      Exchange of cultures between  China, India, Persia, Arabia, Greek and Rome.
+      `,
       answers: [
-        'green',
-        'orange',
-        'pink',
-        'red'
+        'Spice route',
+        'Amber Road',
+        'Via Maris',
+        'Silk road'
       ],
-      correctAnswer: 'green'
+      correctAnswer: 'Silk road',
+      image : ''
     },
     {
-      question: 'What is the current year?',
+      question: 'What came after the Bronze age? ',
       answers: [
-        '1970',
-        '2015',
-        '2020',
-        '2005'
+        'Iron Age',
+        'Dark Age\'s ',
+        'Industrial revolution',
+        'Middle Ages'
       ],
-      correctAnswer: '2020'
+      correctAnswer: 'Iron Age',
+      image : ''
     },
     {
-      question: 'When did Shakespeare write Romeo and Juliet',
+      question: 'What was one of the 1st forms of currency?',
       answers: [
-        '1580',
-        '1784',
-        '1595',
-        '1802'
+        'Shekels',
+        'Cowrie',
+        'Silver',
+        'Gold'
       ],
-      correctAnswer : '1595'
+      correctAnswer : 'Cowrie',
+      image : ''
+    },
+    {
+      question: 'What was the early form of government?',
+      answers: [
+        'Oligarchy',
+        'Anarchy',
+        'Monarchy',
+        'Democracy'
+      ],
+      correctAnswer : 'Monarchy',
+      image : ''
+    },
+    {
+      question: 'What is the most traded item in the world?',
+      answers: [
+        'Cars',
+        'Tea',
+        'Oil',
+        'Spice\'s'
+      ],
+      correctAnswer : 'Cars',
+      image : ''
+    },
+    {
+      question: 'Who was the first person in outer space?',
+      answers: [
+        'Neil Armstrong',
+        'Yuri Gagarin',
+        'Valentina Tereshkova',
+        'Virgil Grissom'
+      ],
+      correctAnswer : 'Yuri Gagarin',
+      image : ''
+    },
+    {
+      question: 'Which of the following inventions was the first to be patented?',
+      answers: [
+        'Car',
+        'Rubber band',
+        'Potash',
+        'Chewing Gum'
+      ],
+      correctAnswer : 'Potash',
+      image : ''
     },
   ],
   quizStarted: false,
@@ -83,7 +132,7 @@ function startPageGenerator(){
 function questionPageGenerator() {
   questionIndex = store.questionNumber;
   
-  questionShort = store.questions[store.questionNumber];
+  questionShort = store.questions[questionIndex];
   
   questionTotal = store.questions.length ;
   
@@ -197,7 +246,7 @@ const changeButton = () =>{
   
 };
 
-const highLightRight = () => {
+const highLightRight = (a) => {
   let j;
   for(let i= 0 ; i < questionShort.answers.length ; i++){
     log('highlight is working');
@@ -207,8 +256,13 @@ const highLightRight = () => {
       j = i ;
     } 
   }
-  
-  $(`div.${questionShort.answers[j]}`).css('background-color' , 'yellow');
+  if(a === questionShort.correctAnswer){
+    $(`div.${questionShort.answers[j]}`).css('background-color' , '#33FF66');
+  }else{
+    $(`div.${questionShort.answers[j]}`).css('background-color' , '#FF0066');
+  }
+  log(j);
+ 
     
 };
 
@@ -217,12 +271,12 @@ function questionAnswer() {
   $('main').on('click','.submitA',function(x) {
     x.preventDefault;
     let radioValue = $('input[name="question"]:checked').val();
+    highLightRight(radioValue);
     changeButton();
-    highLightRight();
-    setTimeout(function(){ifCorrect(radioValue); }, 2000);
+    setTimeout(function(){ifCorrect(radioValue); }, 3000);
     // ifCorrect(radioValue);
     //   startQuestion()
-    log(store.questionNumber)
+    log(store.questionNumber);
   });
 
 }
@@ -274,7 +328,7 @@ function restart() {
     renderStart();
     startQuizFunction();
     return store.questionNumber = 0;
-  })
+  });
   
 }
 
