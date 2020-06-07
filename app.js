@@ -129,7 +129,7 @@ let questionTotal;
 function startPageGenerator(){
   return `<div class="box start">
             <h2>start quiz</h2>
-            <p>bla bla bla basic intro of what the user will be getting into</p>
+            <p>Hello welcome to our history test, let's see how much you know</p>
               <input class="start-game" type="button" value='start quiz'>
           </div>`;
 }
