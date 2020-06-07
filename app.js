@@ -21,10 +21,11 @@ const store = {
         'Silk road'
       ],
       correctAnswer: 'Silk road',
-      image : ''
+      image : 'images/questions/silk-road-rome-.jpg',
+      alt : 'Road'
     },
     {
-      question: 'What came after the Bronze age? ',
+      question: 'What came after the Bronze age?',
       answers: [
         'Iron Age',
         'Dark Age\'s ',
@@ -32,7 +33,8 @@ const store = {
         'Middle Ages'
       ],
       correctAnswer: 'Iron Age',
-      image : ''
+      image : 'images/questions/bronze.jpg',
+      alt : 'helmet'
     },
     {
       question: 'What was one of the 1st forms of currency?',
@@ -43,7 +45,8 @@ const store = {
         'Gold'
       ],
       correctAnswer : 'Cowrie',
-      image : ''
+      image : 'images/questions/Trading.jpg',
+      alt : 'trade'
     },
     {
       question: 'What was the early form of government?',
@@ -54,7 +57,8 @@ const store = {
         'Democracy'
       ],
       correctAnswer : 'Monarchy',
-      image : ''
+      image : 'images/questions/Old-Government-Buildings.jpg',
+      alt : 'building'
     },
     {
       question: 'What is the most traded item in the world?',
@@ -65,7 +69,8 @@ const store = {
         'Spice\'s'
       ],
       correctAnswer : 'Cars',
-      image : ''
+      image : 'images/questions/goods.jpg',
+      alt : 'shipping-create'
     },
     {
       question: 'Who was the first person in outer space?',
@@ -76,7 +81,8 @@ const store = {
         'Virgil Grissom'
       ],
       correctAnswer : 'Yuri Gagarin',
-      image : ''
+      image : 'images/questions/space.png',
+      alt : 'space'
     },
     {
       question: 'Which of the following inventions was the first to be patented?',
@@ -87,7 +93,8 @@ const store = {
         'Chewing Gum'
       ],
       correctAnswer : 'Potash',
-      image : ''
+      image : 'images/questions/old-style-bicycle.jpg',
+      alt : 'bike'
     },
   ],
   quizStarted: false,
@@ -137,24 +144,25 @@ function questionPageGenerator() {
   questionTotal = store.questions.length ;
   
   return `<div class='box questions'>
-            <h2>${questionShort.question}</h2>
             <span>${questionIndex + 1 } out of ${questionTotal}</span>
+            <h2>${questionShort.question}</h2>
+            <img src="${questionShort.image}" alt= "${questionShort.alt}" >
               <form id="questions-form" action="">
                 <div class ="${questionShort.answers[0]}">
                   <input type="radio" id="${questionShort.answers[0]}" name="question" value="${questionShort.answers[0]}">
-                  <label for="question-1">${questionShort.answers[0]}</label>
+                  <label class ="${questionShort.answers[0]}" for="question-1">${questionShort.answers[0]}</label>
                 </div>
                 <div class ="${questionShort.answers[1]}">
                   <input type="radio" id="${questionShort.answers[1]}" name="question" value="${questionShort.answers[1]}">
-                  <label for="question-2">${questionShort.answers[1]}</label>
+                  <label class ="${questionShort.answers[1]}" for="question-2">${questionShort.answers[1]}</label>
                 </div>
                 <div class ="${questionShort.answers[2]}">
                   <input type="radio" id="${questionShort.answers[2]}" name="question" value="${questionShort.answers[2]}">
-                  <label for="question-3">${questionShort.answers[2]}</label>
+                  <label class ="${questionShort.answers[2]}" for="question-3">${questionShort.answers[2]}</label>
                 </div>
                 <div class ="${questionShort.answers[3]}">
                   <input type="radio" id="${questionShort.answers[3]}" name="question" value="${questionShort.answers[3]}">
-                  <label for="question-4">${questionShort.answers[3]}</label>
+                  <label class ="${questionShort.answers[3]}" for="question-4">${questionShort.answers[3]}</label>
                 </div>
                 <div>
                 <input class="submitA" type="button" value="submit">
@@ -241,25 +249,29 @@ function ifCorrect(reply){
   reply === questionShort.correctAnswer ? correct() : incorrect();
 }
 
-const changeButton = () =>{
-  $('input.submitA').attr('value', '??????');
+const changeButton = (a) =>{
+  if(a === questionShort.correctAnswer ){
+    $('input.submitA').attr('value', 'nice');
+  }else{
+    $('input.submitA').attr('value', 'the correct answer is');
+  }
+  
   
 };
 
 const highLightRight = (a) => {
   let j;
   for(let i= 0 ; i < questionShort.answers.length ; i++){
-    log('highlight is working');
-    
-
     if(questionShort.correctAnswer === questionShort.answers[i]){
       j = i ;
     } 
   }
+  let firstWordOf = questionShort.answers[j];
+  let word = firstWordOf.split(' ');
   if(a === questionShort.correctAnswer){
-    $(`div.${questionShort.answers[j]}`).css('background-color' , '#33FF66');
+    $(`label.${word[0]}`).css('background-color' , '#33FF66');
   }else{
-    $(`div.${questionShort.answers[j]}`).css('background-color' , '#FF0066');
+    $(`label.${word[0]}`).css('background-color' , '#FF0066');
   }
   log(j);
  
@@ -272,7 +284,7 @@ function questionAnswer() {
     x.preventDefault;
     let radioValue = $('input[name="question"]:checked').val();
     highLightRight(radioValue);
-    changeButton();
+    changeButton(radioValue);
     setTimeout(function(){ifCorrect(radioValue); }, 3000);
     // ifCorrect(radioValue);
     //   startQuestion()
