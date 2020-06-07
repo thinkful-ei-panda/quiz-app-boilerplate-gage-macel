@@ -2,7 +2,7 @@
 /**
  * Example store structure
  */
-'use strict';
+
 
 const log = console.log;
 
@@ -39,7 +39,7 @@ const store = {
         '1802'
       ],
       correctAnswer : '1595'
-    }
+    },
   ],
   quizStarted: false,
   // questions.length
@@ -64,7 +64,11 @@ const store = {
  */
 /********** TEMPLATE GENERATION FUNCTIONS **********/
 
+let questionIndex;
 
+let questionShort; 
+
+let questionTotal;
 
 function startPageGenerator(){
   return `<div class="box start">
@@ -74,16 +78,18 @@ function startPageGenerator(){
           </div>`;
 }
 
-const questionIndex = store.questionNumber;
 
-const questionShort = store.questions[questionIndex];
-
-const questionTotal = store.questions.length ;
 /********Question ********/
 function questionPageGenerator() {
+  questionIndex = store.questionNumber;
+  
+  questionShort = store.questions[store.questionNumber];
+  
+  questionTotal = store.questions.length ;
+  
   return `<div class='box questions'>
             <h2>${questionShort.question}</h2>
-            <span>${questionIndex} out of ${questionTotal}</span>
+            <span>${questionIndex + 1 } out of ${questionTotal}</span>
               <form id="questions-form" action="">
                 <div class ="${questionShort.answers[0]}">
                   <input type="radio" id="${questionShort.answers[0]}" name="question" value="${questionShort.answers[0]}">
@@ -110,11 +116,12 @@ function questionPageGenerator() {
 
 }
 /*************response*************/
+// set timeout, before html replaced
 function responsePageGenerator(reply) {
   return `<div class="box reply">
        <h2>${reply}</h2>
-    <p><span> Question: ${questionIndex} out of ${questionTotal}</span></p>
-    <input type="button" value='Next Question'>Next Question
+    <p><span> Question: ${questionIndex + 1} out of ${questionTotal}</span></p>
+    <input class="reply" type="button" value='Next Question'>
     </div>`;
 
 }
@@ -161,8 +168,10 @@ function renderResponse(reply) {
 }
  
 function renderFinal( ) {
-  log('renderFinal is working ');
-  $('main').html(finalPageGenerator());
+  if(questionIndex + 1 === store.questions.length ){
+    log('renderFinal is working');
+    $('main').html(finalPageGenerator());
+  }
 }
 
 // This function conditionally replaces the contents of the <main> tag based on the state of the store
@@ -172,66 +181,74 @@ function renderFinal( ) {
 //function to start game 
 function startQuizFunction() {
   $('main').on('click','input.start-game', () => {
-    log('yay!');
     store.quizStarted = true; 
     renderQuestion();
-    questionAnswer();
   });
   
 }
 
 function ifCorrect(reply){
-  reply === questionShort.correctAnswer ? correct() : incorrect();
   questionCounter();
+  reply === questionShort.correctAnswer ? correct() : incorrect();
 }
 
 const changeButton = () =>{
-  $('input.submitA').attr('value', 'next-question');
-  $('input.submitA').attr('class','next');
+  $('input.submitA').attr('value', '??????');
+  
 };
 
 const highLightRight = () => {
   let j;
   for(let i= 0 ; i < questionShort.answers.length ; i++){
+    log('highlight is working');
+    
+
     if(questionShort.correctAnswer === questionShort.answers[i]){
       j = i ;
     } 
   }
+  
   $(`div.${questionShort.answers[j]}`).css('background-color' , 'yellow');
     
 };
 
+
 function questionAnswer() {
-  $('main').on('click','input.submitA',function(x) {
+  $('main').on('click','.submitA',function(x) {
     x.preventDefault;
-    var radioValue = $('input[name="question"]:checked').val();
-    log(radioValue);
+    let radioValue = $('input[name="question"]:checked').val();
     changeButton();
     highLightRight();
+    setTimeout(function(){ifCorrect(radioValue); }, 2000);
+    // ifCorrect(radioValue);
+    //   startQuestion()
+    log(store.questionNumber)
   });
 
 }
 
 
-
 function questionCounter(){
-  store.questionNumber++;
+  return store.questionNumber++;
 }
 
 //++ to store.questionNumber
 //render response page w/correct
-function correct( ) {
+function correct() {
   renderResponse('correct !');
-
-  store.score++;
+  log(store.questionNumber);
   
+  store.score++;
+  renderFinal();
+  // questionAnswer()
 }
 
 //++ to store.questionNumber
 //render response page w/incorrect
+
 function incorrect() {
   renderResponse('incorrect');
-
+  renderFinal();
   
 }
 
@@ -239,19 +256,26 @@ function incorrect() {
 //when next button is pressed
 //load question page
 function nextQuestion(){
-  $('main').on('click','input', () =>{
+  $('main').on('click','input.reply', () =>{
 
+    renderQuestion();
   });
   //click button for next question
-  renderQuestion();
+  
 }
 
 function restart() {
   //if restate button is press, todo
   // [load start & reset score to 0]done
   // [let store.quizStarted = false]done
-  store.questionNumber = 0;
-  renderStart();
+  $('main').on('click', 'input.restart-game', function(){
+    store.quizStarted = false;
+    store.score = 0 ;
+    renderStart();
+    startQuizFunction();
+    return store.questionNumber = 0;
+  })
+  
 }
 
 /******handleFunctionCall******/
@@ -259,7 +283,9 @@ function restart() {
 function handleFunctionCalls(){
   renderStart();
   startQuizFunction();
-  
+  nextQuestion();
+  restart();
+  questionAnswer();
 }
 
 $(handleFunctionCalls);
