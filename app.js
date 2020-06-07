@@ -2,11 +2,6 @@
 /**
  * Example store structure
  */
-
-
-const log = console.log;
-
-
 const store = {
   
   questions: [
@@ -209,24 +204,19 @@ function finalPageGenerator() {
 /********** RENDER FUNCTION(S) **********/
 
 function renderStart( ) {
-  log('renderStart is working');
   $('main').html(startPageGenerator());
   store.quizStarted = false;
 }
 
 function renderQuestion( ) {
-  log('generalRenderFunction is working');
-  $('main').html(questionPageGenerator());
-}
+  $('main').html(questionPageGenerator());}
 
 function renderResponse(reply) {
-  log('renderResponse is working ');
   $('main').html(responsePageGenerator(reply));
 }
  
 function renderFinal( ) {
   if(questionIndex + 1 === store.questions.length ){
-    log('renderFinal is working');
     $('main').html(finalPageGenerator());
   }
 }
@@ -252,8 +242,10 @@ function ifCorrect(reply){
 const changeButton = (a) =>{
   if(a === questionShort.correctAnswer ){
     $('input.submitA').attr('value', 'nice');
+    $('input.submitA').attr('class', 'next');
   }else{
     $('input.submitA').attr('value', 'the correct answer is');
+    $('input.submitA').attr('class', 'next');
   }
   
   
@@ -273,7 +265,7 @@ const highLightRight = (a) => {
   }else{
     $(`label.${word[0]}`).css('background-color' , '#FF0066');
   }
-  log(j);
+
  
     
 };
@@ -286,9 +278,6 @@ function questionAnswer() {
     highLightRight(radioValue);
     changeButton(radioValue);
     setTimeout(function(){ifCorrect(radioValue); }, 3000);
-    // ifCorrect(radioValue);
-    //   startQuestion()
-    log(store.questionNumber);
   });
 
 }
@@ -302,8 +291,6 @@ function questionCounter(){
 //render response page w/correct
 function correct() {
   renderResponse('correct !');
-  log(store.questionNumber);
-  
   store.score++;
   renderFinal();
   // questionAnswer()
@@ -315,7 +302,6 @@ function correct() {
 function incorrect() {
   renderResponse('incorrect');
   renderFinal();
-  
 }
 
 //this will handel the next question button
@@ -331,9 +317,7 @@ function nextQuestion(){
 }
 
 function restart() {
-  //if restate button is press, todo
-  // [load start & reset score to 0]done
-  // [let store.quizStarted = false]done
+
   $('main').on('click', 'input.restart-game', function(){
     store.quizStarted = false;
     store.score = 0 ;
