@@ -277,9 +277,17 @@ function questionAnswer() {
     let radioValue = $('input[name="question"]:checked').val();
     highLightRight(radioValue);
     changeButton(radioValue);
-    setTimeout(function(){ifCorrect(radioValue); }, 3000);
+    // setTimeout(function(){ifCorrect(radioValue); }, 3000);
   });
 
+}
+
+function questionPartMover() {
+  $('main').on('click','.next',function(x) {
+    x.preventDefault;
+    let radioValue = $('input[name="question"]:checked').val();
+    ifCorrect(radioValue);
+  });
 }
 
 
@@ -336,6 +344,7 @@ function handleFunctionCalls(){
   nextQuestion();
   restart();
   questionAnswer();
+  questionPartMover();
 }
 
 $(handleFunctionCalls);
