@@ -37,6 +37,7 @@ main{
   flex-direction: column;
   align-items: center;
   justify-self: center;
+  margin: 0 50px 0 50px;
 }
 
 .box{
@@ -60,6 +61,14 @@ input{
 
 img{
   object-fit: scale-down;
+  height: 60%;
+  width: 60%;
 }
 
+@media all and ( min-width: 1000px){
+  img{
+    height: auto;
+    width: auto;
+  }
+}
 
