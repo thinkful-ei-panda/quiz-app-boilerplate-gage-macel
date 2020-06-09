@@ -115,11 +115,10 @@ const store = {
  */
 /********** TEMPLATE GENERATION FUNCTIONS **********/
 
-let questionIndex;
 
-let questionShort; 
 
-let questionTotal;
+
+
 
 function startPageGenerator(){
   return `<div class="box start">
@@ -132,14 +131,15 @@ function startPageGenerator(){
 
 /********Question ********/
 function questionPageGenerator() {
-  questionIndex = store.questionNumber;
+  let questionIndex = store.questionNumber;
   
-  questionShort = store.questions[questionIndex];
+  let questionShort = store.questions[questionIndex];
   
-  questionTotal = store.questions.length ;
+  let questionTotal = store.questions.length ;
   
   return `<div class='box questions'>
-            <span>${questionIndex + 1 } out of ${questionTotal}</span>
+            <p>${questionIndex + 1 } out of ${questionTotal}</p>
+            <span class="out-of">${store.score} out of ${questionTotal} correct</span><br>
             <h2>${questionShort.question}</h2>
             <img src="${questionShort.image}" alt= "${questionShort.alt}" >
               <form id="questions-form" action="">
@@ -172,17 +172,17 @@ function questionPageGenerator() {
 function responsePageGenerator(reply) {
   return `<div class="box reply">
        <h2>${reply}</h2>
-    <p><span> Question: ${questionIndex + 1} out of ${questionTotal}</span></p>
+    <p><span> Question: ${store.questionNumber + 1} out of ${store.questions.length}</span></p>
     <input class="reply" type="button" value='Next Question'>
     </div>`;
 
 }
 /**********Finale part ***********/
 function outOfReply(){
-  return store.score / questionTotal < .5 ? 'Oof'
-    : store.score / questionTotal < .65 ? 'not too bad'
-      : store.score / questionTotal < .8 ? 'Good job'
-        : store.score / questionTotal < .9 ? 'Great Job!'
+  return store.score / store.questions.length < .5 ? 'Oof'
+    : store.score / store.questions.length < .65 ? 'not too bad'
+      : store.score / store.questions.length < .8 ? 'Good job'
+        : store.score / store.questions.length < .9 ? 'Great Job!'
           : 'Outstanding ' ;
 
 }
@@ -190,7 +190,7 @@ function outOfReply(){
 function finalPageGenerator() {
   return `<div class=" box finale">
             <h2>Your Score</h2>
-              <span class="out-of">${store.score} out of ${questionTotal} correct</span><br>
+              <span class="out-of">${store.score} out of ${store.questions.length} correct</span><br>
               <span>${outOfReply()}</span><br>
                 <input type="button" class="restart-game" value='Try Again?'>
         </div>`;
@@ -205,7 +205,6 @@ function finalPageGenerator() {
 
 function renderStart( ) {
   $('main').html(startPageGenerator());
-  store.quizStarted = false;
 }
 
 function renderQuestion( ) {
@@ -216,7 +215,7 @@ function renderResponse(reply) {
 }
  
 function renderFinal( ) {
-  if(questionIndex + 1 === store.questions.length ){
+  if(store.questionNumber + 1 === store.questions.length ){
     $('main').html(finalPageGenerator());
   }
 }
@@ -226,6 +225,8 @@ function renderFinal( ) {
 /********** EVENT HANDLER FUNCTIONS **********/
 
 //function to start game 
+
+
 function startQuizFunction() {
   $('main').on('click','input.start-game', () => {
     store.quizStarted = true; 
@@ -236,15 +237,15 @@ function startQuizFunction() {
 
 function ifCorrect(reply){
   questionCounter();
-  reply === questionShort.correctAnswer ? correct() : incorrect();
+  reply === store.questions[store.questionNumber].correctAnswer ? correct() : incorrect();
 }
 
 const changeButton = (a) =>{
-  if(a === questionShort.correctAnswer ){
-    $('input.submitA').attr('value', 'nice');
+  if(a === store.questions[store.questionNumber].correctAnswer ){
+    $('input.submitA').attr('value', 'Continue');
     $('input.submitA').attr('class', 'next');
   }else{
-    $('input.submitA').attr('value', 'the correct answer is');
+    $('input.submitA').attr('value', 'Continue');
     $('input.submitA').attr('class', 'next');
   }
   
@@ -253,15 +254,16 @@ const changeButton = (a) =>{
 
 const highLightRight = (a) => {
   let j;
-  for(let i= 0 ; i < questionShort.answers.length ; i++){
-    if(questionShort.correctAnswer === questionShort.answers[i]){
+  for(let i= 0 ; i < store.questions[store.questionNumber].answers.length ; i++){
+    if(store.questions[store.questionNumber].correctAnswer === store.questions[store.questionNumber].answers[i]){
       j = i ;
     } 
   }
-  let firstWordOf = questionShort.answers[j];
+  let firstWordOf = store.questions[store.questionNumber].answers[j];
   let word = firstWordOf.split(' ');
-  if(a === questionShort.correctAnswer){
+  if(a === store.questions[store.questionNumber].correctAnswer){
     $(`label.${word[0]}`).css('background-color' , '#33FF66');
+    store.score++;
   }else{
     $(`label.${word[0]}`).css('background-color' , '#FF0066');
   }
@@ -275,9 +277,11 @@ function questionAnswer() {
   $('main').on('click','.submitA',function(x) {
     x.preventDefault;
     let radioValue = $('input[name="question"]:checked').val();
-    highLightRight(radioValue);
-    changeButton(radioValue);
-    // setTimeout(function(){ifCorrect(radioValue); }, 3000);
+    if(radioValue){
+      highLightRight(radioValue);
+      changeButton(radioValue);
+    }
+    console.log(store.quizStarted);
   });
 
 }
@@ -299,7 +303,6 @@ function questionCounter(){
 //render response page w/correct
 function correct() {
   renderResponse('correct !');
-  store.score++;
   renderFinal();
   // questionAnswer()
 }
