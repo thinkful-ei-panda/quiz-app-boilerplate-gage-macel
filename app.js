@@ -301,8 +301,9 @@ function questionAnswer() {
     x.preventDefault;
     let radioValue = $('input[name="question"]:checked').val();
     if(radioValue){
-      highLightRight(radioValue);
-      changeButton(radioValue);
+     ifCorrect(radioValue)
+      // highLightRight(radioValue);
+      // changeButton(radioValue);
     }
   });
 
@@ -324,6 +325,7 @@ function questionCounter(){
 //++ to store.questionNumber
 //render response page w/correct
 function correct() {
+  store.score++;
   renderResponse('correct !');
   renderFinal();
   // questionAnswer()
