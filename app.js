@@ -17,7 +17,9 @@ const store = {
       ],
       correctAnswer: 'Silk road',
       image : 'images/questions/silk-road-rome-.jpg',
-      alt : 'Road'
+      alt : 'Road',
+      correct : 'Good job! Not a lot of people know that one! ',
+      incorrect : 'The Silk Road was a network of trade routes which connected the east and west, and was central to the economic, cultural, political, and religious interactions between these regions from the 2nd century BCE to the 18th century.'
     },
     {
       question: 'What came after the Bronze age?',
@@ -29,7 +31,9 @@ const store = {
       ],
       correctAnswer: 'Iron Age',
       image : 'images/questions/bronze.jpg',
-      alt : 'helmet'
+      alt : 'helmet',
+      correct : 'I think you deserve a medal for that one.',
+      incorrect : 'Between 500 BC – 332 BC the Age of Iron took place. It was preceded by the Stone Age and the Bronze Age.'
     },
     {
       question: 'What was one of the 1st forms of currency?',
@@ -41,7 +45,9 @@ const store = {
       ],
       correctAnswer : 'Cowrie',
       image : 'images/questions/Trading.jpg',
-      alt : 'trade'
+      alt : 'trade',
+      correct : 'Wonderful! Not a lot of people get that one.',
+      incorrect : 'You might not think it, but people a long time ago before gems and gold even had relevance, would trade shells called cowries for goods.'
     },
     {
       question: 'What was the early form of government?',
@@ -53,7 +59,9 @@ const store = {
       ],
       correctAnswer : 'Monarchy',
       image : 'images/questions/Old-Government-Buildings.jpg',
-      alt : 'building'
+      alt : 'building',
+      correct : 'Yep! Back in the early days the person that owned the food owned the land. ',
+      incorrect : 'Some could argue that anarchy is a form of government, even though its literal definition is an absence of government.'
     },
     {
       question: 'What is the most traded item in the world?',
@@ -65,7 +73,9 @@ const store = {
       ],
       correctAnswer : 'Cars',
       image : 'images/questions/goods.jpg',
-      alt : 'shipping-create'
+      alt : 'shipping-create',
+      correct : 'Good job, I can see you really driving through these questions… ',
+      incorrect : 'Close, but cars are the most traded item in the world. Cars accounted for about $1.35 trillion of the world trade, as of 2018.'
     },
     {
       question: 'Who was the first person in outer space?',
@@ -77,7 +87,9 @@ const store = {
       ],
       correctAnswer : 'Yuri Gagarin',
       image : 'images/questions/space.png',
-      alt : 'space'
+      alt : 'space',
+      correct : 'Nope, Neil Armstrong might have been the first person on the moon, and Valentina Vladimirovna was the first woman in space,  but the first person in space was Russia\'s Yuri Gagarin, who left this world\'s atmosphere on April 12, 1961.',
+      incorrect : 'Stellar! Not a lot of people get that one. '
     },
     {
       question: 'Which of the following inventions was the first to be patented?',
@@ -89,7 +101,9 @@ const store = {
       ],
       correctAnswer : 'Potash',
       image : 'images/questions/old-style-bicycle.jpg',
-      alt : 'bike'
+      alt : 'bike',
+      correct : 'Well that answer deserves a seal of approval.',
+      incorrect : 'Nope. I honestly thought it was rubbers band when I was writing this, but I came to find that is actually a method to make Potash, a common ingredient for fertilizer'
     },
   ],
   quizStarted: false,
@@ -170,9 +184,18 @@ function questionPageGenerator() {
 /*************response*************/
 // set timeout, before html replaced
 function responsePageGenerator(reply) {
+  let message = '';
+  if(reply === 'correct !'){
+    message = store.questions[store.questionNumber - 1].correct; 
+  }else{
+    message =  store.questions[store.questionNumber - 1].incorrect;
+  }
+
   return `<div class="box reply">
        <h2>${reply}</h2>
-    <p><span> Question: ${store.questionNumber + 1} out of ${store.questions.length}</span></p>
+    <p> Question: ${store.questionNumber} out of ${store.questions.length}</p>
+    <p>${store.score} out of ${store.questions.length} correct</p>
+    <p>${message}</p>
     <input class="reply" type="button" value='Next Question'>
     </div>`;
 
@@ -215,7 +238,7 @@ function renderResponse(reply) {
 }
  
 function renderFinal( ) {
-  if(store.questionNumber + 1 === store.questions.length ){
+  if(store.questionNumber === store.questions.length ){
     $('main').html(finalPageGenerator());
   }
 }
@@ -237,7 +260,7 @@ function startQuizFunction() {
 
 function ifCorrect(reply){
   questionCounter();
-  reply === store.questions[store.questionNumber].correctAnswer ? correct() : incorrect();
+  reply === store.questions[store.questionNumber - 1].correctAnswer ? correct() : incorrect();
 }
 
 const changeButton = (a) =>{
@@ -281,7 +304,6 @@ function questionAnswer() {
       highLightRight(radioValue);
       changeButton(radioValue);
     }
-    console.log(store.quizStarted);
   });
 
 }
