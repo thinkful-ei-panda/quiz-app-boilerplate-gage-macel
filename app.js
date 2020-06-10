@@ -17,7 +17,9 @@ const store = {
       ],
       correctAnswer: 'Silk road',
       image : 'images/questions/silk-road-rome-.jpg',
-      alt : 'Road'
+      alt : 'Road',
+      correct : 'Good job! Not a lot of people know that one! ',
+      incorrect : 'The Silk Road was a network of trade routes which connected the east and west, and was central to the economic, cultural, political, and religious interactions between these regions from the 2nd century BCE to the 18th century.'
     },
     {
       question: 'What came after the Bronze age?',
@@ -29,7 +31,9 @@ const store = {
       ],
       correctAnswer: 'Iron Age',
       image : 'images/questions/bronze.jpg',
-      alt : 'helmet'
+      alt : 'helmet',
+      correct : 'I think you deserve a medal for that one.',
+      incorrect : 'Between 500 BC – 332 BC the Age of Iron took place. It was preceded by the Stone Age and the Bronze Age.'
     },
     {
       question: 'What was one of the 1st forms of currency?',
@@ -41,7 +45,9 @@ const store = {
       ],
       correctAnswer : 'Cowrie',
       image : 'images/questions/Trading.jpg',
-      alt : 'trade'
+      alt : 'trade',
+      correct : 'Wonderful! Not a lot of people get that one.',
+      incorrect : 'You might not think it, but people a long time ago before gems and gold even had relevance, would trade shells called cowries for goods.'
     },
     {
       question: 'What was the early form of government?',
@@ -53,7 +59,9 @@ const store = {
       ],
       correctAnswer : 'Monarchy',
       image : 'images/questions/Old-Government-Buildings.jpg',
-      alt : 'building'
+      alt : 'building',
+      correct : 'Yep! Back in the early days the person that owned the food owned the land. ',
+      incorrect : 'Some could argue that anarchy is a form of government, even though its literal definition is an absence of government.'
     },
     {
       question: 'What is the most traded item in the world?',
@@ -65,7 +73,9 @@ const store = {
       ],
       correctAnswer : 'Cars',
       image : 'images/questions/goods.jpg',
-      alt : 'shipping-create'
+      alt : 'shipping-create',
+      correct : 'Good job, I can see you really driving through these questions… ',
+      incorrect : 'Close, but cars are the most traded item in the world. Cars accounted for about $1.35 trillion of the world trade, as of 2018.'
     },
     {
       question: 'Who was the first person in outer space?',
@@ -77,7 +87,9 @@ const store = {
       ],
       correctAnswer : 'Yuri Gagarin',
       image : 'images/questions/space.png',
-      alt : 'space'
+      alt : 'space',
+      correct : 'Nope, Neil Armstrong might have been the first person on the moon, and Valentina Vladimirovna was the first woman in space,  but the first person in space was Russia\'s Yuri Gagarin, who left this world\'s atmosphere on April 12, 1961.',
+      incorrect : 'Stellar! Not a lot of people get that one. '
     },
     {
       question: 'Which of the following inventions was the first to be patented?',
@@ -89,7 +101,9 @@ const store = {
       ],
       correctAnswer : 'Potash',
       image : 'images/questions/old-style-bicycle.jpg',
-      alt : 'bike'
+      alt : 'bike',
+      correct : 'Well that answer deserves a seal of approval.',
+      incorrect : 'Nope. I honestly thought it was rubbers band when I was writing this, but I came to find that is actually a method to make Potash, a common ingredient for fertilizer'
     },
   ],
   quizStarted: false,
@@ -115,11 +129,10 @@ const store = {
  */
 /********** TEMPLATE GENERATION FUNCTIONS **********/
 
-let questionIndex;
 
-let questionShort; 
 
-let questionTotal;
+
+
 
 function startPageGenerator(){
   return `<div class="box start">
@@ -132,14 +145,15 @@ function startPageGenerator(){
 
 /********Question ********/
 function questionPageGenerator() {
-  questionIndex = store.questionNumber;
+  let questionIndex = store.questionNumber;
   
-  questionShort = store.questions[questionIndex];
+  let questionShort = store.questions[questionIndex];
   
-  questionTotal = store.questions.length ;
+  let questionTotal = store.questions.length ;
   
   return `<div class='box questions'>
-            <span>${questionIndex + 1 } out of ${questionTotal}</span>
+            <p>${questionIndex + 1 } out of ${questionTotal}</p>
+            <span class="out-of">${store.score} out of ${questionTotal} correct</span><br>
             <h2>${questionShort.question}</h2>
             <img src="${questionShort.image}" alt= "${questionShort.alt}" >
               <form id="questions-form" action="">
@@ -170,19 +184,28 @@ function questionPageGenerator() {
 /*************response*************/
 // set timeout, before html replaced
 function responsePageGenerator(reply) {
+  let message = '';
+  if(reply === 'correct !'){
+    message = store.questions[store.questionNumber - 1].correct; 
+  }else{
+    message =  store.questions[store.questionNumber - 1].incorrect;
+  }
+
   return `<div class="box reply">
        <h2>${reply}</h2>
-    <p><span> Question: ${questionIndex + 1} out of ${questionTotal}</span></p>
+    <p> Question: ${store.questionNumber} out of ${store.questions.length}</p>
+    <p>${store.score} out of ${store.questions.length} correct</p>
+    <p>${message}</p>
     <input class="reply" type="button" value='Next Question'>
     </div>`;
 
 }
 /**********Finale part ***********/
 function outOfReply(){
-  return store.score / questionTotal < .5 ? 'Oof'
-    : store.score / questionTotal < .65 ? 'not too bad'
-      : store.score / questionTotal < .8 ? 'Good job'
-        : store.score / questionTotal < .9 ? 'Great Job!'
+  return store.score / store.questions.length < .5 ? 'Oof'
+    : store.score / store.questions.length < .65 ? 'not too bad'
+      : store.score / store.questions.length < .8 ? 'Good job'
+        : store.score / store.questions.length < .9 ? 'Great Job!'
           : 'Outstanding ' ;
 
 }
@@ -190,7 +213,7 @@ function outOfReply(){
 function finalPageGenerator() {
   return `<div class=" box finale">
             <h2>Your Score</h2>
-              <span class="out-of">${store.score} out of ${questionTotal} correct</span><br>
+              <span class="out-of">${store.score} out of ${store.questions.length} correct</span><br>
               <span>${outOfReply()}</span><br>
                 <input type="button" class="restart-game" value='Try Again?'>
         </div>`;
@@ -205,7 +228,6 @@ function finalPageGenerator() {
 
 function renderStart( ) {
   $('main').html(startPageGenerator());
-  store.quizStarted = false;
 }
 
 function renderQuestion( ) {
@@ -216,7 +238,7 @@ function renderResponse(reply) {
 }
  
 function renderFinal( ) {
-  if(questionIndex + 1 === store.questions.length ){
+  if(store.questionNumber === store.questions.length ){
     $('main').html(finalPageGenerator());
   }
 }
@@ -226,6 +248,8 @@ function renderFinal( ) {
 /********** EVENT HANDLER FUNCTIONS **********/
 
 //function to start game 
+
+
 function startQuizFunction() {
   $('main').on('click','input.start-game', () => {
     store.quizStarted = true; 
@@ -236,15 +260,15 @@ function startQuizFunction() {
 
 function ifCorrect(reply){
   questionCounter();
-  reply === questionShort.correctAnswer ? correct() : incorrect();
+  reply === store.questions[store.questionNumber - 1].correctAnswer ? correct() : incorrect();
 }
 
 const changeButton = (a) =>{
-  if(a === questionShort.correctAnswer ){
-    $('input.submitA').attr('value', 'nice');
+  if(a === store.questions[store.questionNumber].correctAnswer ){
+    $('input.submitA').attr('value', 'Continue');
     $('input.submitA').attr('class', 'next');
   }else{
-    $('input.submitA').attr('value', 'the correct answer is');
+    $('input.submitA').attr('value', 'Continue');
     $('input.submitA').attr('class', 'next');
   }
   
@@ -253,15 +277,16 @@ const changeButton = (a) =>{
 
 const highLightRight = (a) => {
   let j;
-  for(let i= 0 ; i < questionShort.answers.length ; i++){
-    if(questionShort.correctAnswer === questionShort.answers[i]){
+  for(let i= 0 ; i < store.questions[store.questionNumber].answers.length ; i++){
+    if(store.questions[store.questionNumber].correctAnswer === store.questions[store.questionNumber].answers[i]){
       j = i ;
     } 
   }
-  let firstWordOf = questionShort.answers[j];
+  let firstWordOf = store.questions[store.questionNumber].answers[j];
   let word = firstWordOf.split(' ');
-  if(a === questionShort.correctAnswer){
+  if(a === store.questions[store.questionNumber].correctAnswer){
     $(`label.${word[0]}`).css('background-color' , '#33FF66');
+    store.score++;
   }else{
     $(`label.${word[0]}`).css('background-color' , '#FF0066');
   }
@@ -275,9 +300,11 @@ function questionAnswer() {
   $('main').on('click','.submitA',function(x) {
     x.preventDefault;
     let radioValue = $('input[name="question"]:checked').val();
-    highLightRight(radioValue);
-    changeButton(radioValue);
-    // setTimeout(function(){ifCorrect(radioValue); }, 3000);
+    if(radioValue){
+     ifCorrect(radioValue)
+      // highLightRight(radioValue);
+      // changeButton(radioValue);
+    }
   });
 
 }
@@ -298,8 +325,8 @@ function questionCounter(){
 //++ to store.questionNumber
 //render response page w/correct
 function correct() {
-  renderResponse('correct !');
   store.score++;
+  renderResponse('correct !');
   renderFinal();
   // questionAnswer()
 }
