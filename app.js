@@ -47,7 +47,7 @@ const store = {
       image : 'images/questions/Trading.jpg',
       alt : 'trade',
       correct : 'Wonderful! Not a lot of people get that one.',
-      incorrect : 'You might not think it, but people a long time ago before gems and gold even had relevance, would trade shells called cowries for goods.'
+      incorrect : 'You might not think it, but people a long time ago before gems and gold even had relevance, would trade shells called cowrie for goods.'
     },
     {
       question: 'What was the early form of government?',
@@ -60,8 +60,8 @@ const store = {
       correctAnswer : 'Monarchy',
       image : 'images/questions/Old-Government-Buildings.jpg',
       alt : 'building',
-      correct : 'Yep! Back in the early days the person that owned the food owned the land. ',
-      incorrect : 'Some could argue that anarchy is a form of government, even though its literal definition is an absence of government.'
+      correct : 'Yep! I can see your really ruling over this quiz. ',
+      incorrect : 'Nope, actually Monarchies were the first form of government. The earliest monarchies that we know about are the ones in Sumer and Egypt. These both began around 3000 BC.'
     },
     {
       question: 'What is the most traded item in the world?',
@@ -74,7 +74,7 @@ const store = {
       correctAnswer : 'Cars',
       image : 'images/questions/goods.jpg',
       alt : 'shipping-create',
-      correct : 'Good job, I can see you really driving through these questions… ',
+      correct : 'Good job, I can see your really driving through these questions…',
       incorrect : 'Close, but cars are the most traded item in the world. Cars accounted for about $1.35 trillion of the world trade, as of 2018.'
     },
     {
@@ -88,8 +88,8 @@ const store = {
       correctAnswer : 'Yuri Gagarin',
       image : 'images/questions/space.png',
       alt : 'space',
-      correct : 'Nope, Neil Armstrong might have been the first person on the moon, and Valentina Vladimirovna was the first woman in space,  but the first person in space was Russia\'s Yuri Gagarin, who left this world\'s atmosphere on April 12, 1961.',
-      incorrect : 'Stellar! Not a lot of people get that one. '
+      correct : 'Stellar! Not a lot of people get that one.',
+      incorrect : 'Nope, Neil Armstrong might have been the first person on the moon, and Valentina Vladimirovna was the first woman in space,  but the first person in space was Russia\'s Yuri Gagarin, who left this world\'s atmosphere on April 12, 1961.' 
     },
     {
       question: 'Which of the following inventions was the first to be patented?',
@@ -103,7 +103,7 @@ const store = {
       image : 'images/questions/old-style-bicycle.jpg',
       alt : 'bike',
       correct : 'Well that answer deserves a seal of approval.',
-      incorrect : 'Nope. I honestly thought it was rubbers band when I was writing this, but I came to find that is actually a method to make Potash, a common ingredient for fertilizer'
+      incorrect : 'Nope. I honestly thought it was rubber bands when I was writing this, but I came to find that is actually a method to make Potash, a common ingredient for fertilizer'
     },
   ],
   quizStarted: false,
@@ -262,38 +262,10 @@ function ifCorrect(reply){
   questionCounter();
   reply === store.questions[store.questionNumber - 1].correctAnswer ? correct() : incorrect();
 }
-
-const changeButton = (a) =>{
-  if(a === store.questions[store.questionNumber].correctAnswer ){
-    $('input.submitA').attr('value', 'Continue');
-    $('input.submitA').attr('class', 'next');
-  }else{
-    $('input.submitA').attr('value', 'Continue');
-    $('input.submitA').attr('class', 'next');
-  }
-  
-  
-};
-
-const highLightRight = (a) => {
-  let j;
-  for(let i= 0 ; i < store.questions[store.questionNumber].answers.length ; i++){
-    if(store.questions[store.questionNumber].correctAnswer === store.questions[store.questionNumber].answers[i]){
-      j = i ;
-    } 
-  }
-  let firstWordOf = store.questions[store.questionNumber].answers[j];
-  let word = firstWordOf.split(' ');
-  if(a === store.questions[store.questionNumber].correctAnswer){
-    $(`label.${word[0]}`).css('background-color' , '#33FF66');
-    store.score++;
-  }else{
-    $(`label.${word[0]}`).css('background-color' , '#FF0066');
-  }
-
- 
-    
-};
+//r.i.p. changeButton
+//r.i.p highLightRight
+//i thought you guy were cool, you will be missed 
+//........**start to play taps https://www.youtube.com/watch?v=S-Xrlf3taEo **// 
 
 
 function questionAnswer() {
@@ -301,9 +273,8 @@ function questionAnswer() {
     x.preventDefault;
     let radioValue = $('input[name="question"]:checked').val();
     if(radioValue){
-     ifCorrect(radioValue)
-      // highLightRight(radioValue);
-      // changeButton(radioValue);
+      ifCorrect(radioValue);
+
     }
   });
 
@@ -327,7 +298,6 @@ function questionCounter(){
 function correct() {
   store.score++;
   renderResponse('correct !');
-  renderFinal();
   // questionAnswer()
 }
 
@@ -336,7 +306,7 @@ function correct() {
 
 function incorrect() {
   renderResponse('incorrect');
-  renderFinal();
+  
 }
 
 //this will handel the next question button
@@ -344,7 +314,7 @@ function incorrect() {
 //load question page
 function nextQuestion(){
   $('main').on('click','input.reply', () =>{
-
+    renderFinal();
     renderQuestion();
   });
   //click button for next question
