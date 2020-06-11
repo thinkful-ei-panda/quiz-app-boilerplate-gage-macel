@@ -188,9 +188,9 @@ function questionPageGenerator() {
 function responsePageGenerator(reply) {
   let message = '';
   if(reply === 'correct !'){
-    message = store.questions[store.questionNumber - 1].correct; 
+    message = store.questions[store.questionNumber].correct; 
   }else{
-    message =  store.questions[store.questionNumber - 1].incorrect;
+    message =  store.questions[store.questionNumber].incorrect;
   }
 
   return `<div class="box reply">
@@ -251,8 +251,8 @@ function startQuizFunction() {
 }
 
 function ifCorrect(reply){
-  questionCounter();
-  reply === store.questions[store.questionNumber - 1].correctAnswer ? correct() : incorrect();
+  
+  reply === store.questions[store.questionNumber].correctAnswer ? correct() : incorrect();
 }
 //r.i.p. changeButton
 //r.i.p highLightRight
@@ -307,6 +307,10 @@ function incorrect() {
 //load question page
 function nextQuestion(){
   $('main').on('click','input.reply', () =>{
+    questionCounter();
+    if(store.questionNumber === store.questions.length){
+      render();
+    }
     store.onQuestion = true ;
     render();
   });
@@ -318,6 +322,7 @@ function restart() {
 
   $('main').on('click', 'input.restart-game', function(){
     store.quizStarted = false;
+    store.onQuestion = true ;
     store.score = 0 ;
     render();
     startQuizFunction();
