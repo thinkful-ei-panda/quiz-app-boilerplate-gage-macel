@@ -110,7 +110,9 @@ const store = {
   // questions.length
   questionNumber: 0,
   // increment score when correct answer
-  score: 0
+  score: 0 , 
+
+  onQuestion : false
 };
 
 /**
@@ -145,11 +147,11 @@ function startPageGenerator(){
 
 /********Question ********/
 function questionPageGenerator() {
-  let questionIndex = store.questionNumber;
+  const questionIndex = store.questionNumber;
   
-  let questionShort = store.questions[questionIndex];
+  const questionShort = store.questions[questionIndex];
   
-  let questionTotal = store.questions.length ;
+  const questionTotal = store.questions.length ;
   
   return `<div class='box questions'>
             <p>${questionIndex + 1 } out of ${questionTotal}</p>
@@ -224,24 +226,13 @@ function finalPageGenerator() {
 
 // These functions return HTML templates
 
-/********** RENDER FUNCTION(S) **********/
-
-function renderStart( ) {
-  $('main').html(startPageGenerator());
-}
-
-function renderQuestion( ) {
-  $('main').html(questionPageGenerator());}
-
-function renderResponse(reply) {
-  $('main').html(responsePageGenerator(reply));
-}
- 
-function renderFinal( ) {
-  if(store.questionNumber === store.questions.length ){
-    $('main').html(finalPageGenerator());
-  }
-}
+/********** !!!!!RENDER FUNCTION!!!!! NOW WITH NO 'S' **********/
+const render = (reply) => {
+  !store.quizStarted ? $('main').html(startPageGenerator())
+    :store.onQuestion ? $('main').html(questionPageGenerator())
+      : store.questionNumber === store.questions.length ? $('main').html(finalPageGenerator())
+        : $('main').html(responsePageGenerator(reply)) ;
+};
 
 // This function conditionally replaces the contents of the <main> tag based on the state of the store
 
@@ -253,7 +244,8 @@ function renderFinal( ) {
 function startQuizFunction() {
   $('main').on('click','input.start-game', () => {
     store.quizStarted = true; 
-    renderQuestion();
+    store.onQuestion =true ; 
+    render();
   });
   
 }
@@ -271,8 +263,9 @@ function ifCorrect(reply){
 function questionAnswer() {
   $('main').on('click','.submitA',function(x) {
     x.preventDefault;
-    let radioValue = $('input[name="question"]:checked').val();
+    const radioValue = $('input[name="question"]:checked').val();
     if(radioValue){
+      store.onQuestion = false ; 
       ifCorrect(radioValue);
 
     }
@@ -283,7 +276,7 @@ function questionAnswer() {
 function questionPartMover() {
   $('main').on('click','.next',function(x) {
     x.preventDefault;
-    let radioValue = $('input[name="question"]:checked').val();
+    const radioValue = $('input[name="question"]:checked').val();
     ifCorrect(radioValue);
   });
 }
@@ -297,7 +290,7 @@ function questionCounter(){
 //render response page w/correct
 function correct() {
   store.score++;
-  renderResponse('correct !');
+  render('correct !');
   // questionAnswer()
 }
 
@@ -305,7 +298,7 @@ function correct() {
 //render response page w/incorrect
 
 function incorrect() {
-  renderResponse('incorrect');
+  render('incorrect');
   
 }
 
@@ -314,8 +307,8 @@ function incorrect() {
 //load question page
 function nextQuestion(){
   $('main').on('click','input.reply', () =>{
-    renderFinal();
-    renderQuestion();
+    store.onQuestion = true ;
+    render();
   });
   //click button for next question
   
@@ -326,7 +319,7 @@ function restart() {
   $('main').on('click', 'input.restart-game', function(){
     store.quizStarted = false;
     store.score = 0 ;
-    renderStart();
+    render();
     startQuizFunction();
     return store.questionNumber = 0;
   });
@@ -336,7 +329,7 @@ function restart() {
 /******handleFunctionCall******/
 
 function handleFunctionCalls(){
-  renderStart();
+  render();
   startQuizFunction();
   nextQuestion();
   restart();
